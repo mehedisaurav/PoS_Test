@@ -14,7 +14,15 @@ namespace Test.Model
 
         public double TotalAmount { get; set; }
 
+        public double Due { get; set; }
+
+        public double Paid { get; set; }
+
         public string Note { get; set; }
+
+        public Guid? SupplierId { get; set; }
+
+        public virtual Supplier Supplier { get; set; }  
 
         public ICollection<PurchaseDetails> PurchaseDetailses { get; set; }    
     }

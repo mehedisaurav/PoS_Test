@@ -20,6 +20,10 @@ namespace Test.Model
 
         public string UnitMeasurement { get; set; }
 
+        public Guid? SupplierId { get; set; }
+
+        public virtual Supplier Supplier { get; set; }
+
         public Category Category { get; set; }
     }
 }

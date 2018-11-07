@@ -42,6 +42,7 @@ namespace Repository
             modelBuilder.Entity<Sale>().HasKey(s => s.SaleId);
             modelBuilder.Entity<Sale>().Property(s => s.NoOfItem).IsRequired();
             modelBuilder.Entity<Sale>().Property(s => s.TotalAmount).IsRequired();
+            modelBuilder.Entity<Sale>().HasOne(x => x.Customer).WithMany(p => p.Sales).HasForeignKey(k => k.CustomerId);
 
             //SaleDetails
             modelBuilder.Entity<SaleDetails>().HasKey(s => s.SaleDetailsId);
@@ -57,6 +58,7 @@ namespace Repository
             modelBuilder.Entity<Purchase>().HasKey(p => p.PurchaseId);
             modelBuilder.Entity<Purchase>().Property(p => p.NoOfItem).IsRequired();
             modelBuilder.Entity<Purchase>().Property(p => p.TotalAmount).IsRequired();
+            modelBuilder.Entity<Purchase>().HasOne(x => x.Supplier).WithMany(p=>p.Purchases).HasForeignKey(k => k.SupplierId);
 
             //PurchaseDetails
             modelBuilder.Entity<PurchaseDetails>().HasKey(p => p.PurchaseDetailsId);
@@ -66,6 +68,21 @@ namespace Repository
             modelBuilder.Entity<PurchaseDetails>().HasOne(p => p.Purchase).WithMany(p => p.PurchaseDetailses)
                 .HasForeignKey(f => f.PurchaseId).IsRequired();
             modelBuilder.Entity<PurchaseDetails>().Property(p => p.ProductId).IsRequired();
+
+
+
+            //Supplier
+            modelBuilder.Entity<Supplier>().HasKey(p => p.SupplierId);
+            modelBuilder.Entity<Supplier>().Property(p => p.Name).HasMaxLength(50).IsRequired();
+            modelBuilder.Entity<Supplier>().Property(p => p.Phone).IsRequired();
+            modelBuilder.Entity<Supplier>().Property(p => p.Address).HasMaxLength(50).IsRequired();
+
+
+            //Customer
+            modelBuilder.Entity<Customer>().HasKey(p => p.CustomerId);
+            modelBuilder.Entity<Customer>().Property(p => p.Name).HasMaxLength(50).IsRequired();
+            modelBuilder.Entity<Customer>().Property(p => p.Phone).IsRequired();
+            
 
             // add your own confguration here
         }
