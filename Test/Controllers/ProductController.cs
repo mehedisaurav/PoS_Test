@@ -9,6 +9,7 @@ using Test.IRepository;
 using Test.Model;
 using Test.ViewModel;
 using Test.ViewModel.ListViewModel;
+using Test.ViewModel.ProductView;
 
 namespace Test.Controllers
 {
@@ -45,7 +46,7 @@ namespace Test.Controllers
 
         [HttpPost]
         [Route("SaveProduct")]
-        public async Task<IActionResult> SaveProduct([FromBody]Product product)
+        public async Task<IActionResult> SaveProduct([FromBody]ProductSaveUpdateModelView product)
         {
             await this._repository.CreateProduct(product);
             return Ok("Success");
@@ -53,7 +54,7 @@ namespace Test.Controllers
 
         [HttpPut]
         [Route("UpdateProduct")]
-        public async Task<IActionResult> UpdateProduct([FromBody]Product product)
+        public async Task<IActionResult> UpdateProduct([FromBody]ProductSaveUpdateModelView product)
         {
             await this._repository.UpdateProduct(product);
             return Ok("Success");

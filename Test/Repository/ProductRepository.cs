@@ -9,6 +9,7 @@ using Test.IRepository;
 using Test.Model;
 using Test.ViewModel;
 using Test.ViewModel.ListViewModel;
+using Test.ViewModel.ProductView;
 
 namespace Test.Repository
 {
@@ -23,13 +24,22 @@ namespace Test.Repository
 
 
 
-        public async Task CreateProduct(Product product)
+        public async Task CreateProduct(ProductSaveUpdateModelView model)
         {
+            Product product = new Product();
+
             product.ProductId = Guid.NewGuid();
             product.Create = DateTime.UtcNow;
             product.Modify = DateTime.UtcNow;
             product.CreateBy = Guid.NewGuid();
             product.ModifyBy = Guid.NewGuid();
+
+            product.Name = model.Name;
+            product.Price = model.Price;
+            product.Quantity = model.Quantity;
+            product.UnitMeasurement = model.MeasureType;
+            product.Category = _posDbContext.Categories.Where(x => x.CategoryId == model.Category.CategoryId).FirstOrDefault();
+            product.CategoryId = model.Category.CategoryId;
             
             await Create(product);
         }
@@ -74,9 +84,18 @@ namespace Test.Repository
             };
         }
 
-        public async Task UpdateProduct(Product product)
+        public async Task UpdateProduct(ProductSaveUpdateModelView product)
         {
-            await Update(product);
+            Product oldProduct = _posDbContext.Products.Where(x => x.ProductId == product.ProductId).FirstOrDefault();
+
+            oldProduct.Name = product.Name;
+            oldProduct.Price = product.Price;
+            oldProduct.Quantity = product.Quantity;
+            oldProduct.UnitMeasurement = product.MeasureType;
+            oldProduct.Category = _posDbContext.Categories.Where(x => x.CategoryId == product.Category.CategoryId).FirstOrDefault();
+            oldProduct.Modify = DateTime.Now;
+
+            await Update(oldProduct);
         }
     }
 }

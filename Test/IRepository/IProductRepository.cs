@@ -7,14 +7,15 @@ using Repository.Model;
 using Test.Model;
 using Test.ViewModel;
 using Test.ViewModel.ListViewModel;
+using Test.ViewModel.ProductView;
 
 namespace Test.IRepository
 {
     public interface IProductRepository : IGenericRepository<Product>
     {
         Task<ProductQueryListView> GetAllProductTask(ProductViewListModel query);
-        Task CreateProduct(Product product);
-        Task UpdateProduct(Product product);
+        Task CreateProduct(ProductSaveUpdateModelView product);
+        Task UpdateProduct(ProductSaveUpdateModelView product);
         Task<ProductViewModel> ProductDetails(Guid Id);
     }
 }

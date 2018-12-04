@@ -43,16 +43,17 @@ namespace Test.Controllers
 
         [HttpPost]
         [Route("CreateCategory")]
-        public async Task<IActionResult> CreateCategory([FromBody]Category category)
+        public async Task<IActionResult> CreateCategory([FromBody]CategorySaveUpdateModelView category)
         {
-             await _repository.CreateCategory(category);
+            if (category != null) await _repository.CreateCategory(category);
+            else return BadRequest();
 
             return Ok();
         }
 
         [HttpPut]
         [Route("CategoryUpdate")]
-        public async Task<IActionResult> CategoryUpdate([FromBody]Category category)
+        public async Task<IActionResult> CategoryUpdate([FromBody]CategorySaveUpdateModelView category)
         {
              await _repository.UpdateCategory(category);
             return Ok();
@@ -73,6 +74,16 @@ namespace Test.Controllers
             var List = await _repository.CategoryListDropdown(name);
 
             return List;
+        }
+
+
+        [HttpGet]
+        [Route("CategoryDublicateCheckByName/name")]
+        public async Task<bool> DublicateCheckByName(string name)
+        {
+            bool hasDublicate = await _repository.CategoryCheckFordublicateByName(name);
+
+            return hasDublicate;
         }
 
     }

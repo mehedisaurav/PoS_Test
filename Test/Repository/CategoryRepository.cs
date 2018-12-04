@@ -31,7 +31,7 @@ namespace PosService.Repository
 
             var cateList =  GetAll().OrderByDescending(x => x.Modify) ;
             queryList.Count = cateList.Count();
-            cateList = cateList.Skip(query.Page * query.Size).Take(query.Size).OrderBy(s=>s.CategoryName);
+            cateList = cateList.Skip(query.Page * query.Size).Take(query.Size).OrderByDescending(s=>s.Modify);
             var list = new List<CategoryViewModel>();
             foreach (Category category in cateList)
             {
@@ -72,33 +72,40 @@ namespace PosService.Repository
         }
 
 
-        public async Task CreateCategory(Category category)
+        public async Task CreateCategory(CategorySaveUpdateModelView category)
         {
-            category.CategoryId = Guid.NewGuid();
-            category.Create = DateTime.UtcNow;
-            category.Modify = DateTime.UtcNow;
-            category.CreateBy = Guid.NewGuid();
-            category.ModifyBy = Guid.NewGuid();
-            category.Status = 1;
-            await Create(category);
+            Category newCategory = new Category()
+            {
+                CategoryName = category.CategoryName,
+                Note = category.Note,
+                CategoryId = Guid.NewGuid(),
+                Create = DateTime.UtcNow,
+                Modify = DateTime.UtcNow,
+                CreateBy = Guid.NewGuid(),
+                ModifyBy = Guid.NewGuid(),
+                Status = 1,
+        };
+
+            
+            await Create(newCategory);
 
         }
 
-        public async Task UpdateCategory(Category category)
+        public async Task UpdateCategory(CategorySaveUpdateModelView category)
         {
-            var catg = new Category()
+            if (category.CategoryId != null)
             {
-                CategoryId = category.CategoryId,
-                CategoryName = category.CategoryName,
-                Note = category.Note,
-                Status = category.Status,
-                Modify = DateTime.UtcNow,
-                Create = category.Create,
-                CreateBy = category.CreateBy,
-                ModifyBy = category.ModifyBy
-            };
+                Category oldCategory = _context.Categories.Where(x => x.CategoryId == category.CategoryId).FirstOrDefault();
 
-            await Update(catg);
+
+                oldCategory.CategoryId = category.CategoryId.Value;
+                oldCategory.CategoryName = category.CategoryName;
+                oldCategory.Note = category.Note;
+                oldCategory.Modify = DateTime.UtcNow;
+
+
+                await Update(oldCategory);
+            }
         }
 
         public async Task<IQueryable<CategoryDropdownList>> CateDropList()
@@ -138,6 +145,15 @@ namespace PosService.Repository
 
             return List.AsQueryable().OrderBy(x => x.CategoryName);
 
+        }
+
+
+        public async Task<bool> CategoryCheckFordublicateByName(string name)
+        {
+            var result = _context.Categories.Where(x => x.CategoryName == name).FirstOrDefault();
+
+
+            return result!=null ? true : false;
         }
 
     }
