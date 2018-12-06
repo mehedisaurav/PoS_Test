@@ -8,12 +8,12 @@ namespace Test.ViewModel.ProductView
 {
     public class ProductSaveUpdateModelView
     {
-        public Guid ProductId { get; set; }
-        public string Name { get; set; }
-        public Category Category { get; set; }
+        public Guid? ProductId { get; set; }
+        public string ProductName { get; set; }
+        public Guid CategoryId { get; set; }
         public double Price { get; set; }
         public int Quantity { get; set; }
-        public string MeasureType { get; set; }
+        public string Measure { get; set; }
 
     }
 }
