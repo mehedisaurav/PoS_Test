@@ -48,16 +48,26 @@ namespace Test.Controllers
         [Route("SaveProduct")]
         public async Task<IActionResult> SaveProduct([FromBody]ProductSaveUpdateModelView product)
         {
-            await this._repository.CreateProduct(product);
-            return Ok("Success");
+            if(product != null)
+            {
+                await this._repository.CreateProduct(product);
+                return Ok("Success");
+            }
+
+            return BadRequest();
         }
 
         [HttpPut]
         [Route("UpdateProduct")]
         public async Task<IActionResult> UpdateProduct([FromBody]ProductSaveUpdateModelView product)
         {
-            await this._repository.UpdateProduct(product);
-            return Ok("Success");
+            if (product != null)
+            {
+                await this._repository.UpdateProduct(product);
+                return Ok("Success");
+            }
+
+            return BadRequest();
         }
 
     }

@@ -129,7 +129,7 @@ namespace PosService.Repository
 
         public async Task<IQueryable<CategoryDropdownList>> CategoryListDropdown(string name)
         {
-            var list = _context.Categories.Where(x => x.CategoryName.StartsWith(name));
+            var list = _context.Categories.Where(x => x.CategoryName.Contains(name));
             var List = new List<CategoryDropdownList>();
 
             foreach (Category category in list)
